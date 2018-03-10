@@ -1,0 +1,168 @@
+html, body {
+	height: 100%;
+	margin: 0;
+}
+body{
+	font-family: Helvetica, Arial, Sans-Serif;
+	margin:0;
+	padding:0;
+	color: #222;
+}
+.wrapper{
+  max-width:500px;
+  padding: 71px 7px 8px;
+  min-height: calc(100% - 140px);
+  margin: 0 auto;
+}
+#overlay{
+  position: absolute;
+  top:64px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(0,0,0,0.5);
+  display: none;
+}
+.element{
+  border-style: dotted solid;
+  border-color: #FFF;
+  border-radius:50%;
+  position:relative;
+  animation-name: rotationZ;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  /*cubic-bezier(0.89, 0.43, 0.54, 0.59);*/
+}
+.spinner{
+  width: 54px;
+  height: 54px;
+  top:calc(50% - 27px);
+  left: calc(50% - 28px);
+  border-width:3px;
+  border-radius:50%;
+}
+#spnMessage{
+  margin-top: 170px;
+  color: #FFF;
+  text-align: center;
+}
+@keyframes rotationZ {
+    0%{
+      -webkit-transform: rotateZ(0deg);
+       transform: rotateZ(0deg);
+
+    }
+    100%{
+      -webkit-transform: rotateZ(360deg);
+       transform: rotateZ(360deg);
+    }
+}
+header, footer{
+	background: #234177;
+	color:#fff;
+}
+header{
+    padding: 10px 25px;
+    z-index: 999;
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 44px;
+}
+header h1{
+    font-size: 1.4em;
+    font-weight: bold;
+    display: inline-block;
+    padding:0;
+    margin:9px;
+}
+.widthWrap{
+    width: 100%;
+    max-width: 490px;
+    margin: 0 auto;
+}
+a{
+    color: #000;
+    text-decoration: none;
+}
+footer,
+.push {
+	height: 25px;
+}
+footer{
+  padding: 18px 25px;
+}
+p.disclaimer{
+	text-align:center;
+	font-size:11px;
+    margin: 0 auto;
+}
+
+/*** Below is the user input field ***/
+.form{
+  display: inline;
+  margin:0 auto;
+}
+.infoBlock{
+  margin-bottom: 8px;
+  border: #e4e4e4 1px solid;
+  overflow: hidden;
+}
+#results div.information{
+  padding: 0 5px;
+}
+div.information{
+  position: relative;
+  font-size:20px;
+  margin:5px;
+  min-height: 50px;
+  line-height: 37px;
+}
+label{
+  font-size: 0;
+  vertical-align: 0;
+  display: none;
+}
+input{
+  height: 50px;
+  width: 100%;
+  font-size: 27px;
+  padding-left: 5px;
+}
+button{
+  color: white;
+}
+/*** Station buttons ***/
+button.stnButton{
+  border: 0;
+  border-radius: 0.5em;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0.5em;
+  background-color: #3968bb;
+  width: 100%;
+  height: 50px;
+  padding: 0;
+  margin: 3px 0;
+  vertical-align: top;
+}
+button.errButton{
+  width: 100%;
+  height: 50px;
+  padding: 0;
+  margin: 3px 0;
+  vertical-align: top;
+}
+table{
+  color: white;
+  font-size: 10px;
+  vertical-align: middle;
+  border-spacing: 0;
+  border-collapse: separate;
+  width: 100%;
+  background: #000;
+}
+td{
+  padding:3px;
+}
