@@ -1,3 +1,4 @@
 
 .DS_Store
 includes/credentials.php
+includes/analytics.php

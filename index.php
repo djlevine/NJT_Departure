@@ -1,5 +1,6 @@
 <html lang="en">
 <head>
+	<?php include_once 'includes/analytics.php'; ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="apple-mobile-web-app-title" content="Travel Alerts">
