@@ -83,6 +83,7 @@ function err($message){
 //Quick sanitizing function
 function sanitizeSql($input){
   $conn = db();
+  $input = preg_replace("/&#9992/", "", $input);
   $input = mysqli_real_escape_string($conn, $input);
   return $input;
 }
@@ -119,7 +120,8 @@ function sqlSetup(){
 	$stnTable = "CREATE TABLE `_stationCodes` (
 		`stationCode` varchar(3) NOT NULL,
 		`stationName` text NOT NULL,
-		`updated` text NOT NULL
+    `bannerMsg` text NOT NULL,
+    `updated` text NOT NULL
     )";
 	checkTable("_stationCodes", $stnTable);
 

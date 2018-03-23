@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL); ini_set('display_errors', 'on');
 include_once 'db.php';
 
 $q = strtoupper(isset($_GET['q']) ? htmlspecialchars($_GET['q']) : '');
@@ -34,7 +35,6 @@ function currentSched($station){
 
 //Get Items from the NJT RSS Feed
 function parseSched($station){
-	// $api = 'http://njttraindata_tst.njtransit.com:8090/njttraindata.asmx/getTrainScheduleXML'; //Test
 	$api = 'http://traindata.njtransit.com:8092/NJTTrainData.asmx/getTrainScheduleXML'; //Prod
 	$postResults = simplexml_load_string(postRequest($api, $station));
 	foreach ($postResults->STATION_2CHAR as $stationCode) {
@@ -61,7 +61,7 @@ function parseSched($station){
 			'stationCode' => $stationCode,                   //Station 2 digit code
 			'line' => $element->LINE,                        //NJT Line
 			'lineAbrv' => $element->LINEABBREVIATION,        //NJT Line Abrv
-			'destination' =>  $element->DESTINATION,         //Destination
+			'destination' =>  sanitizeSql($element->DESTINATION),         //Destination
 			'trainNo' => $element->TRAIN_ID,                 //Train schedule number
 			'trackNo' => $element->TRACK,                 	 //Track number
 			// 'direction' => $element->DIRECTION,           //Direction (east or west)
@@ -71,11 +71,12 @@ function parseSched($station){
 			'stationPosition' => $element->STATION_POSITION,  //Origin, Stop, or Term
 			'textColor' => $element->FORECOLOR,               //Foreground color
 			'background' => $element->BACKCOLOR,              //Background color
-			'status' => $element->STATUS,                     //Current line message
-			'inlineMSG' => $element->INLINEMSg                //Current line message
+			'status' => $element->STATUS,                     //Current line status
+			'inlineMSG' => trim($element->INLINEMSG)                //Current line message
 		);
 		updateRecord($stationCode, $data);
 		}
+		print_r(bannerMessage($postResults, $station));
 	}
 	$time = date('m:d:H:i:s');
 	$updateSql = "UPDATE _stationCodes 
@@ -85,15 +86,33 @@ function parseSched($station){
 }
 
 function stationDB($input){
+	$departures = array();
+	//Retrieve Station Banner Message
+	$sqlMsg = "SELECT bannerMsg FROM _stationCodes WHERE stationCode='$input'";
+	$resultMsg = db_query($sqlMsg);
+	if ($resultMsg) {
+		while($row = $resultMsg->fetch_assoc()) {
+		     array_push($departures, $row);
+		}
+	}
+	// Retrieve station departure data
 	$sql = "SELECT * FROM $input";
 	$result = db_query($sql);
-	$departures = array();
 	if ($result) {
 		while($row = $result->fetch_assoc()) {
 		     array_push($departures, $row);
 		}
 	}
+
 	return json_encode($departures, JSON_FORCE_OBJECT);
 }
 
+
+function bannerMessage($postResults, $stationCode){
+	$banner = $postResults->BANNERMSG;
+	$updateSql = "UPDATE _stationCodes 
+				  set bannerMsg = '$banner' 
+				  where stationCode = '$stationCode'";
+	db_query($updateSql);
+}
 ?>

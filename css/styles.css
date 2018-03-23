@@ -166,3 +166,15 @@ table{
 td{
   padding:3px;
 }
+.bannerMsg{
+  /*background: #000;*/
+  /*color: #FFF;*/
+  padding: 5px;
+  /*text-align: center;*/
+}
+.inlineMsg{
+  color: #000;
+  border-width: 0;
+  border-style: solid;
+  border-color: #555;
+}

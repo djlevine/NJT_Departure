@@ -5,12 +5,10 @@
  */
 var typingTimer; //timer identifier
 var input = document.getElementById('stnInput');
-
 input.onkeyup = function(){
 	clearTimeout(typingTimer);
 	typingTimer = setTimeout(checkInput, 650);
 };
-
 input.onkeydown = function(){
 	clearTimeout(typingTimer);
 };
@@ -83,6 +81,10 @@ function getData(value) {
 	   			document.getElementById("overlay").style.display = "none";
 	   		}
 
+	   		if (myObj[0]['bannerMsg'] != "") {
+	   			banner(myObj[0]['bannerMsg']); //write the banner message
+	   		};
+
 			var newTable = document.createElement('table');
 			newTable.id = "departureV";
 			newTable.innerHTML = 
@@ -96,7 +98,7 @@ function getData(value) {
 			"</tr></thead>";
 			document.getElementById('results').appendChild(newTable);
 	
-	   		for (var i = 0, l = Object.keys(myObj).length; i < l; i++) {
+	   		for (var i = 1, l = Object.keys(myObj).length; i < l; i++) {
 	   			var response = {
 	   				stationCode:myObj[i]['stationCode'],
 	   				line:myObj[i]['line'],
@@ -129,19 +131,19 @@ function getData(value) {
 	   			};
 	   			writeToPage(response);
 	   		}
-
 	  	}
 	};
-	xhttp.open("GET", "includes/accessData.php?q=" + value, true);
+	xhttp.open("GET", "includes/departureVision.php?q=" + value, true);
 	xhttp.send();
 }
 
-//Write departure information to the page
+// Write departure information to the page
 function writeToPage(response){
 	if (response.trackNo == 'Single') {response.trackNo = 1;}
 	var newContent = document.createElement('tr');
+	var styles = "color:" + response.textColor + "; background:" + response.background + "; font-size: 14px;";
 	newContent.className = 'updateItem ' + response.lineAbrv; //Leave the space after the classname or they all mush together
-	newContent.style = "color:" + response.textColor + "; background:" + response.background + "; font-size: 14px;";
+	newContent.style  = styles;
 	newContent.innerHTML = 
 			"<td>" + response.departureT + "</td>" +
 			"<td align='left'>" + response.destination + "</td>" +
@@ -150,7 +152,14 @@ function writeToPage(response){
 			"<td align='center'>" + response.trackNo  + "</td>" +
 			"<td align='right'>" + response.status + "</td>";
 	document.getElementById('departureV').appendChild(newContent);
-	document.getElementById("overlay").style.display = "none";
+
+	if (response.inlineMSG) {
+		newInlineMsg = document.createElement('tr');
+		newInlineMsg.style = styles;
+		newInlineMsg.innerHTML = "<td colspan='6' align='center' class='inlineMsg'>" + response.inlineMSG + "</td>";
+		document.getElementById('departureV').appendChild(newInlineMsg);
+		document.getElementById("overlay").style.display = "none";
+	}
 }
 
 // function writeToPage(response){
@@ -171,3 +180,11 @@ function writeToPage(response){
 // 	document.getElementById('results').appendChild(newContent);
 // 	document.getElementById("overlay").style.display = "none";
 // }
+
+function banner(message){
+	var banner = document.createElement('div');
+	banner.className = 'bannerMsg';
+	banner.innerHTML =  message;
+	document.getElementById('results').appendChild(banner);
+	document.getElementById("overlay").style.display = "none";
+}
